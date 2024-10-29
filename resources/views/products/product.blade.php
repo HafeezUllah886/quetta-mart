@@ -22,6 +22,7 @@
                     <table class="table" id="buttons-datatables">
                         <thead>
                             <th>#</th>
+                            <th>Code</th>
                             <th>Name</th>
                             <th>Category</th>
                             <th>Purchase Price</th>
@@ -33,6 +34,7 @@
                             @foreach ($items as $key => $item)
                                 <tr>
                                     <td>{{ $key + 1 }}</td>
+                                    <td>{{ $item->code }}</td>
                                     <td>{{ $item->name }}</td>
                                     <td>{{ $item->category->name }}</td>
                                     <td>{{ number_format($item->pprice, 2) }}</td>
@@ -56,6 +58,12 @@
                                                 @csrf
                                                 @method('patch')
                                                 <div class="modal-body">
+                                                    <div class="form-group">
+                                                        <label for="code">Code</label>
+                                                        <input type="text" name="code" required
+                                                            value="{{ $item->code }}" id="code"
+                                                            class="form-control">
+                                                    </div>
                                                     <div class="form-group mt-2">
                                                         <label for="name">Name</label>
                                                         <input type="text" name="name" required
@@ -127,6 +135,10 @@
                 <form action="{{ route('product.store') }}" method="post">
                     @csrf
                     <div class="modal-body">
+                        <div class="form-group">
+                            <label for="code">Code</label>
+                            <input type="text" name="code" required id="code" class="form-control">
+                        </div>
                         <div class="form-group mt-2">
                             <label for="name">Name</label>
                             <input type="text" name="name" required id="name" class="form-control">

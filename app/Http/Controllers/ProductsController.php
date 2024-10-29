@@ -34,10 +34,10 @@ class ProductsController extends Controller
     {
         $request->validate(
             [
-                'name' => "unique:products,name",
+                'code' => "unique:products,code",
             ],
             [
-            'name.unique' => "Product already Existing",
+            'code.unique' => "Product Code already In Use",
             ]
         );
 
@@ -69,10 +69,10 @@ class ProductsController extends Controller
     {
         $request->validate(
             [
-                'name' => "unique:products,name,".$id,
+                'code' => "unique:products,code,".$id,
             ],
             [
-            'name.unique' => "Product already Existing",
+            'code.unique' => "Product code already in Use",
             ]
         );
 

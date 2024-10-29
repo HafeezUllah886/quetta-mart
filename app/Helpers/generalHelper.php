@@ -129,14 +129,14 @@ function productStockValue($id)
 
 function projectNameAuth()
 {
-    return "YASEEN RICE DEALER";
+    return "Quetta Mart & Pharmacy";
 }
 
 function projectNameHeader()
 {
-    return "YASEEN RICE DEALER";
+    return "Quetta Mart & Pharmacy";
 }
 function projectNameShort()
 {
-    return "YRD";
+    return "QMP";
 }
