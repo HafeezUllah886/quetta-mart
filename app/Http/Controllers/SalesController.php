@@ -26,7 +26,6 @@ class SalesController extends Controller
 
     public function __construct()
     {
-        // Apply middleware to the edit method
         $this->middleware(confirmPassword::class)->only('edit');
     }
     /**
@@ -44,6 +43,10 @@ class SalesController extends Controller
     public function create()
     {
         $products = products::orderby('name', 'asc')->get();
+        foreach($products as $product)
+        {
+            $product->stock = getStock($product->id);
+        }
         $warehouses = warehouses::all();
         $customers = accounts::customer()->get();
         $accounts = accounts::business()->get();
@@ -85,9 +88,11 @@ class SalesController extends Controller
             {
                 if($request->amount[$key] > 0)
                 {
-                    $qty = $request->qty[$key];
+                $qty = $request->qty[$key];
                 $price = $request->price[$key];
                 $total += $request->amount[$key];
+
+                $stock = stock::where('productID', $id)->where('batch', $request->batch[$key])->orderBy('id', 'desc')->first();
                 sale_details::create(
                     [
                         'salesID'       => $sale->id,
@@ -97,10 +102,12 @@ class SalesController extends Controller
                         'qty'           => $qty,
                         'amount'        => $request->amount[$key],
                         'date'          => $request->date,
+                        'batch'         => $stock->batch,
+                        'expiry'        => $stock->expiry,
                         'refID'         => $ref,
                     ]
                 );
-                createStock($id,0, $qty, $request->date, "Sold in Inv # $sale->id", $ref, $request->warehouse[$key]);
+                createStock($id,0, $qty, $request->date, "Sold in Inv # $sale->id", $ref, $request->warehouse[$key], $stock->batch, $stock->expiry);
                 }
 
             }
@@ -413,7 +420,13 @@ class SalesController extends Controller
 
     public function getSignleProduct($id)
     {
-        $product = products::with('unit')->find($id);
+        $product = products::find($id);
+        $stocks = stock::select('batch', DB::raw('SUM(cr) - SUM(db) AS balance'))
+                  ->where('productID', $product->id)
+                  ->groupBy('batch')
+                  ->get();
+
+        $product->batches = $stocks;
         return $product;
     }
 }

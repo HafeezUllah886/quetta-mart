@@ -49,6 +49,8 @@
                                         <th width="10%" class="text-center">Warehouse</th>
                                         <th class="text-center">P-Price</th>
                                         <th class="text-center">S-Price</th>
+                                        <th class="text-center">Batch</th>
+                                        <th class="text-center">Expiry</th>
                                         <th class="text-center">Qty</th>
                                         <th class="text-end">Amount</th>
                                         <th></th>
@@ -67,6 +69,9 @@
                                             </select></td>
                                             <td class="no-padding"><input type="number" name="pprice[]" oninput="updateChanges({{$id}})" required step="any" value="{{$product->pprice}}" min="1" class="form-control text-center no-padding" id="pprice_{{$id}}"></td>
                                             <td class="no-padding"><input type="number" name="price[]" required step="any" value="{{$product->price}}" min="0" class="form-control text-center no-padding" id="price_{{$id}}"></td>
+
+                                            <td class="no-padding"><input type="text" name="batch[]" value="{{$product->batch}}" class="form-control text-center no-padding" id="batch_{{$id}}"></td>
+                                            <td class="no-padding"><input type="date" name="expiry[]" value="{{date("Y-m-d", strtotime($product->expiry))}}" class="form-control text-center no-padding" id="expiry_{{$id}}"></td>
                                             <td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges({{$id}})" min="0" required step="any" value="{{$product->qty}}" class="form-control text-center no-padding" id="qty_{{$id}}"></td>
                                             <td class="no-padding"><input type="number" name="amount[]" min="0.1" readonly required step="any" value="{{$product->amount}}" class="form-control text-center no-padding" id="amount_{{$id}}"></td>
                                             <td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow({{$id}})">X</span> </td>
@@ -76,7 +81,7 @@
                                     </tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="5" class="text-end">Total</th>
+                                            <th colspan="7" class="text-end">Total</th>
                                             <th class="text-end" id="totalAmount">0.00</th>
                                             <th></th>
                                         </tr>
@@ -218,6 +223,8 @@
                         html += '</select></td>';
                         html += '<td class="no-padding"><input type="number" name="pprice[]" oninput="updateChanges(' + id + ')" required step="any" value="'+product.pprice+'" min="1" class="form-control text-center no-padding" id="pprice_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="price[]" required step="any" value="'+product.price+'" min="0" class="form-control text-center no-padding" id="price_' + id + '"></td>';
+                        html += '<td class="no-padding"><input type="text" name="batch[]" class="form-control text-center no-padding" id="batch_' + id + '"></td>';
+                        html += '<td class="no-padding"><input type="date" name="expiry[]" class="form-control text-center no-padding" id="expiry_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges(' + id + ')" min="0" required step="any" value="1" class="form-control text-center no-padding" id="qty_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="amount[]" min="0.1" readonly required step="any" value="1" class="form-control text-center no-padding" id="amount_' + id + '"></td>';
                         html += '<td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow('+id+')">X</span> </td>';

@@ -94,6 +94,8 @@ body {
                                                         <th scope="col" class="text-start">Warehouse</th>
                                                         <th scope="col" class="text-end">P-Price</th>
                                                         <th scope="col" class="text-end">S-Price</th>
+                                                        <th scope="col" class="text-end">Batch</th>
+                                                        <th scope="col" class="text-end">Expiry</th>
                                                         <th scope="col" class="text-end">Qty</th>
                                                         <th scope="col" class="text-end">Amount</th>
                                                     </tr>
@@ -106,9 +108,10 @@ body {
                                                         <td class="text-start p-1 m-1">{{$product->warehouse->name}}</td>
                                                         <td class="text-end p-1 m-1">{{number_format($product->pprice,2)}}</td>
                                                         <td class="text-end p-1 m-1">{{number_format($product->price,2)}}</td>
+                                                        <td class="text-end p-1 m-1">{{$product->batch ?? "-"}}</td>
+                                                        <td class="text-end p-1 m-1">{{$product->expiry == null ? "-" : date("d-m-Y", strtotime($product->expiry))}}</td>
                                                         <td class="text-end p-1 m-1">{{number_format($product->qty)}}</td>
                                                         <td class="text-end p-1 m-1">{{number_format($product->amount,2)}}</td>
-
                                                        </tr>
                                                    @endforeach
                                                 </tbody>

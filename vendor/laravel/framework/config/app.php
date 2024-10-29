@@ -88,7 +88,7 @@ return [
     'locale' => env('APP_LOCALE', 'en'),
 
     'domains' => [
-        'yaseen.test',
+        'quetta-mart.test',
         'yaseen-s.test',
         'yaseen.diamondquetta.com',
         'testyaseen.diamondquetta.com',
@@ -96,7 +96,7 @@ return [
     ],
 
     'databases' => [
-        'yaseen',
+        'quetta',
         'test',
     ],
 

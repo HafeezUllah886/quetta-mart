@@ -35,7 +35,7 @@ function lastDayOfMonth()
 }
 
 
-function createStock($id, $cr, $db, $date, $notes, $ref, $warehouse)
+function createStock($id, $cr, $db, $date, $notes, $ref, $warehouse, $batch, $expiry)
 {
     stock::create(
         [
@@ -46,6 +46,8 @@ function createStock($id, $cr, $db, $date, $notes, $ref, $warehouse)
             'notes'         => $notes,
             'refID'         => $ref,
             'warehouseID'   => $warehouse,
+            'batch'         => $batch,
+            'expiry'        => $expiry,
         ]
     );
 }

@@ -99,9 +99,11 @@ class PurchaseController extends Controller
                         'date'          => $request->date,
                         'refID'         => $ref,
                         'warehouseID'   => $request->warehouse[$key],
+                        'batch'         => $request->batch[$key],
+                        'expiry'        => $request->expiry[$key],
                     ]
                 );
-                createStock($id, $qty, 0, $request->date, "Purchased", $ref, $request->warehouse[$key]);
+                createStock($id, $qty, 0, $request->date, "Purchased", $ref, $request->warehouse[$key], $request->batch[$key], $request->expiry[$key]);
 
                 $product = products::find($id);
                 $product->update(
@@ -264,11 +266,13 @@ class PurchaseController extends Controller
                         'qty'           => $qty,
                         'amount'        => $amount,
                         'date'          => $request->date,
+                        'batch'         => $request->batch[$key],
+                        'expiry'        => $request->expiry[$key],
                         'refID'         => $ref,
                         'warehouseID'   => $request->warehouse[$key],
                     ]
                 );
-                createStock($id, $qty, 0, $request->date, "Purchased", $ref, $request->warehouse[$key]);
+                createStock($id, $qty, 0, $request->date, "Purchased", $ref, $request->warehouse[$key], $request->batch[$key], $request->expiry[$key]);
 
                 $product = products::find($id);
                 $product->update(

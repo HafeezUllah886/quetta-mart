@@ -20,6 +20,8 @@ return new class extends Migration
             $table->float('qty');
             $table->float('amount');
             $table->date('date');
+            $table->string('batch')->nullable();
+            $table->date('expiry')->nullable();
             $table->bigInteger('refID');
             $table->timestamps();
         });

@@ -27,7 +27,9 @@
                                     <select name="product" class="selectize" id="product">
                                         <option value=""></option>
                                         @foreach ($products as $product)
+                                        @if ($product->stock > 0)
                                             <option value="{{ $product->id }}">{{ $product->name }}</option>
+                                        @endif
                                         @endforeach
                                     </select>
                                 </div>
@@ -38,6 +40,7 @@
                                     <thead>
                                         <th width="20%">Product</th>
                                         <th class="text-center">Warehouse</th>
+                                        <th class="text-center">Batch</th>
                                         <th class="text-center">Qty</th>
                                         <th class="text-center">Price</th>
                                         <th class="text-center">Amount</th>
@@ -46,7 +49,7 @@
                                     <tbody id="products_list"></tbody>
                                     <tfoot>
                                         <tr>
-                                            <th colspan="4" class="text-end">Total</th>
+                                            <th colspan="5" class="text-end">Total</th>
                                             <th class="text-end" id="totalAmount">0.00</th>
                                         </tr>
                                     </tfoot>
@@ -230,7 +233,6 @@
                         return element === product.id;
                     });
                     if (found.length > 0) {
-
                     } else {
                         var id = product.id;
                         var html = '<tr id="row_' + id + '">';
@@ -240,10 +242,20 @@
                                 html += '<option value="' + warehouse.id + '" >' + warehouse.name + '</option>';
                             });
                         html += '</select></td>';
-                        html += '<td class="no-padding"><input type="number" name="qty[]" oninput="updateChanges(' + id +')" min="0" step="any" value="0" class="form-control text-center" id="qty_' + id + '"></div></td>';
-                        html += '<td class="no-padding"><input type="number" name="price[]" oninput="updateChanges(' + id + ')" step="any" value="'+product.price+'" min="1" class="form-control text-center" id="price_' + id + '"></td>';
-                        html += '<td class="no-padding"><input type="number" name="amount[]" readonly step="any" value="0.00" min="0" class="form-control text-center" id="amount_' + id + '"></td>';
-                        html += '<td> <span class="btn btn-sm btn-danger" onclick="deleteRow('+id+')">X</span> </td>';
+                        html += '<td class="no-padding">';
+                            html += '<select class="form-control text-center" name="batch[]" id="batch_'+id+'" onchange="updateChanges(' + id +')">';
+                                product.batches.forEach(function (b){
+                                    if(b.balance > 0)
+                                    {
+                                        html += '<option value="'+b.batch+'" data-stock="'+b.balance+'">'+b.batch+'</option>';
+                                    }
+                                });
+                            html += '</select>';
+                        html += '</td>';
+                        html += '<td class="no-padding"><div class="input-group"><span class="input-group-text" id="stockValue_'+id+'"></span><input type="number" max="" name="qty[]" oninput="updateChanges(' + id +')" min="0" required step="any" value="1" class="form-control text-center" id="qty_' + id + '"></div></td>';
+                        html += '<td class="no-padding"><input type="number" name="price[]" oninput="updateChanges(' + id + ')" step="any" value="'+product.price+'" min="1" class="form-control text-center no-padding" id="price_' + id + '"></td>';
+                        html += '<td class="no-padding"><input type="number" name="amount[]" readonly step="any" value="0.00" min="0" class="form-control text-center no-padding" id="amount_' + id + '"></td>';
+                        html += '<td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow('+id+')">X</span> </td>';
                         html += '<input type="hidden" name="id[]" value="' + id + '">';
                         html += '<input type="hidden" id="stock_'+id+'" value="' + product.stock + '">';
                         html += '</tr>';
@@ -256,8 +268,13 @@
         }
 
         function updateChanges(id) {
-            var qty = $('#qty_' + id).val();
+
             var price = $('#price_' + id).val();
+            var stock = $('#batch_' + id).find('option:selected');
+                stock = stock.data('stock');
+            $("#stockValue_" + id).text(stock);
+            $("#qty_" + id).attr("max", stock);
+            var qty = $('#qty_' + id).val();
 
             var amount = price * qty;
 
