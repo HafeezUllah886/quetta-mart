@@ -228,6 +228,15 @@ class SalesController extends Controller
         $warehouses = warehouses::all();
         $customers = accounts::customer()->get();
         $accounts = accounts::business()->get();
+        foreach($sale->details as $product)
+        {
+            $stocks = stock::select('batch', DB::raw('SUM(cr) - SUM(db) AS balance'))
+                  ->where('productID', $product->product->id)
+                  ->groupBy('batch')
+                  ->get();
+
+            $product->batches = $stocks;
+        }
         session()->forget('confirmed_password');
         return view('sales.edit', compact('products', 'warehouses', 'customers', 'accounts', 'sale'));
     }
@@ -275,6 +284,7 @@ class SalesController extends Controller
                     $qty = $request->qty[$key];
                 $price = $request->price[$key];
                 $total += $request->amount[$key];
+                $stock = stock::where('productID', $id)->where('batch', $request->batch[$key])->orderBy('id', 'desc')->first();
                 sale_details::create(
                     [
                         'salesID'       => $sale->id,
@@ -283,12 +293,13 @@ class SalesController extends Controller
                         'warehouseID'   => $request->warehouse[$key],
                         'qty'           => $qty,
                         'amount'        => $request->amount[$key],
-
                         'date'          => $request->date,
+                        'batch'         => $stock->batch,
+                        'expiry'        => $stock->expiry,
                         'refID'         => $ref,
                     ]
                 );
-                createStock($id,0, $qty, $request->date, "Sold in Inv # $sale->id", $ref, $request->warehouse[$key]);
+                createStock($id,0, $qty, $request->date, "Sold in Inv # $sale->id", $ref, $request->warehouse[$key], $stock->batch, $stock->expiry);
                 }
             }
 

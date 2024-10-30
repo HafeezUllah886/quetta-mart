@@ -243,7 +243,7 @@
                             });
                         html += '</select></td>';
                         html += '<td class="no-padding">';
-                            html += '<select class="form-control text-center" name="batch[]" id="batch_'+id+'" onchange="updateChanges(' + id +')">';
+                            html += '<select class="form-control text-center no-padding" name="batch[]" id="batch_'+id+'" onchange="updateChanges(' + id +')">';
                                 product.batches.forEach(function (b){
                                     if(b.balance > 0)
                                     {
@@ -252,7 +252,7 @@
                                 });
                             html += '</select>';
                         html += '</td>';
-                        html += '<td class="no-padding"><div class="input-group"><span class="input-group-text" id="stockValue_'+id+'"></span><input type="number" max="" name="qty[]" oninput="updateChanges(' + id +')" min="0" required step="any" value="1" class="form-control text-center" id="qty_' + id + '"></div></td>';
+                        html += '<td class="no-padding"><div class="input-group"><span class="input-group-text no-padding" id="stockValue_'+id+'"></span><input type="number" max="" name="qty[]" oninput="updateChanges(' + id +')" min="0" required step="any" value="1" class="form-control text-center no-padding" id="qty_' + id + '"></div></td>';
                         html += '<td class="no-padding"><input type="number" name="price[]" oninput="updateChanges(' + id + ')" step="any" value="'+product.price+'" min="1" class="form-control text-center no-padding" id="price_' + id + '"></td>';
                         html += '<td class="no-padding"><input type="number" name="amount[]" readonly step="any" value="0.00" min="0" class="form-control text-center no-padding" id="amount_' + id + '"></td>';
                         html += '<td class="no-padding"> <span class="btn btn-sm btn-danger" onclick="deleteRow('+id+')">X</span> </td>';
